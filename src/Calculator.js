@@ -28,10 +28,8 @@ const Calculator = () => {
   };
 
   const calculatePercentage = (downPaymentValue, homePriceValue) => {
-
     const homePriceFloat = parseFloat(homePriceValue);
     const downPaymentFloat = parseFloat(downPaymentValue);
-
     if (
       !isNaN(homePriceFloat) &&
       !isNaN(downPaymentFloat) &&
@@ -39,7 +37,6 @@ const Calculator = () => {
     ) {
       const calculatedPercentage = (
         (downPaymentFloat / homePriceFloat) * 100)
-
       return parseFloat(calculatedPercentage);
     } else {
       return 0;
@@ -47,9 +44,11 @@ const Calculator = () => {
   };
   const percentage = calculatePercentage(downPayment, homePrice);
 
+
   const handleYearClicked = (year) => {
     setSelectedYear(year);
   }
+
 
   useEffect(() => {
     if (monthlyPayment > 0) {
@@ -58,18 +57,16 @@ const Calculator = () => {
     if (isFocused) {
       resetState(); // Reset your state or perform any other actions
     }
-
-
   }, [monthlyPayment, navigation, isFocused]);
 
+
+
   const calculateMortgage = () => {
-
-
     if (homePrice === 0 || downPayment === 0 || interestRate === 0 || selectedYear === 0) {
       Alert.alert("Validation Error", "Please fill in all input fields.");
       return;
     }
-    
+
     //Formula:
     // P = (Pv * r) / (1 - (1 + r)^(-n))
     // Where:
@@ -91,13 +88,35 @@ const Calculator = () => {
     // Update the state with the calculated monthly payment
     setMonthlyPayment(monthlyPaymentResult.toFixed(2));
   };
-
   console.log("calculator : " + monthlyPayment);
 
-  return (
+  const yearLength = [30, 25, 15, 10]
+  const LengthOfYear = yearLength.map((item, index) => (
     
+      <View style={styles.yearsContainer}>
+        <TouchableOpacity
+          style={[
+            styles.yearButton,
+            selectedYear == item ? styles.selectedButton : null,
+          ]}
+          onPress={() => handleYearClicked(item)}
+        >
+          <Text style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>
+            {item}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    
+  
+
+  ));
+
+
+
+  return (
+
     <View style={styles.constainer}>
-        
+
       <Text style={styles.headingText1}>Calculate</Text>
       <Text style={styles.headingText2}>Mortgage</Text>
       <Text style={styles.inputTextheading}>Home Price</Text>
@@ -105,6 +124,7 @@ const Calculator = () => {
       <TextInput
         style={styles.textInput}
         keyboardType="numeric"
+        selectionColor={'#c7a7f3'}
         value={homePrice === 0 ? '' : `$ ${homePrice}`}
         placeholder="$ 0"
         onChangeText={(value) => {
@@ -125,7 +145,6 @@ const Calculator = () => {
         value={homePrice}
         style={{ width: windowWidth - 50, marginTop: -10 }}
         thumbTintColor={'#734d8a'}
-        
         maximumTrackTintColor={'#734d8a'}
         minimumTrackTintColor={'#734d8a'}
         interestRate={homePrice}
@@ -140,6 +159,7 @@ const Calculator = () => {
         <TextInput
           style={styles.textInput}
           keyboardType="numeric"
+          selectionColor={'#c7a7f3'}
           value={downPayment === 0 ? '' : `$ ${downPayment}`}
           placeholder="$ 0"
           onChangeText={(value) => {
@@ -171,53 +191,23 @@ const Calculator = () => {
         <Text style={styles.inputPercentageText}>{Math.round(percentage)}%</Text>
       </View>
 
-
       <View style={styles.yearsHeadingTextView}>
         <Text style={styles.lengthOfLoanText}>Length of loan</Text>
         <Text style={styles.yearsText}>Years</Text>
       </View>
 
-      <View style={styles.yearsContainer}>
-
-        <TouchableOpacity style={[styles.yearButton,
-        selectedYear == 30 ? styles.selectedButton : null]}
-          onPress={() => handleYearClicked(30)}
-        >
-          <Text style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>30</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.yearButton,
-        selectedYear == 20 ? styles.selectedButton : null]}
-          onPress={() => handleYearClicked(20)}
-        >
-          <Text style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>20</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.yearButton,
-        selectedYear == 15 ? styles.selectedButton : null]}
-          onPress={() => handleYearClicked(15)}
-        >
-          <Text style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>15</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.yearButton,
-        selectedYear == 10 ? styles.selectedButton : null]}
-          onPress={() => handleYearClicked(10)}
-        >
-          <Text style={{ color: 'white', fontFamily: 'Montserrat-Regular' }}>10</Text>
-        </TouchableOpacity>
-
+      <View style={{ flexDirection: 'row' }}>
+      {LengthOfYear}
       </View>
-      
-
-
 
       <Text style={styles.inputTextheading}>Interest rate</Text>
       <TextInput
         style={styles.textInput}
         keyboardType="numeric"
+        selectionColor={'#c7a7f3'}
         value={interestRate === 0 ? '' : `${interestRate}` + `%`}
-
         placeholder="0 %"
         onChangeText={(value) => {
-
           const numericValue = parseFloat(value.replace(" %", "").replace("%", ""));
           if (!isNaN(numericValue) || numericValue === 0) {
             setInterestRate(numericValue);
@@ -247,9 +237,14 @@ const Calculator = () => {
         onPress={() => calculateMortgage()}>
         <Text style={styles.buttonText}>Calculate</Text>
       </TouchableOpacity>
-      <StatusBar hidden={true}/>
+
+
+
+      <StatusBar hidden={true} />
+
     </View>
-   
+
+
   )
 }
 
@@ -257,15 +252,15 @@ const styles = StyleSheet.create({
   constainer: {
     flex: 1,
     alignItems: 'center'
-   
+
   },
 
   menuIconSize: {
     height: 30,
     width: 30,
     alignSelf: 'flex-start',
-    marginLeft:-80,
-    
+    marginLeft: -80,
+
   },
 
   textInput: {
@@ -319,40 +314,39 @@ const styles = StyleSheet.create({
   },
 
   yearsHeadingTextView: {
-    
-    width: windowWidth-50,
-    height:30,
-    justifyContent:'center',
-    
-    
+    width: windowWidth - 50,
+    height: 30,
+    justifyContent: 'center',
+
+
   },
 
   lengthOfLoanText: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 18,
     color: '#413b5c',
-    
-    
-    
+
+
+
   },
 
   yearsText: {
     fontFamily: 'Montserrat-Regular',
     fontSize: 18,
     color: '#413b5c',
-    alignSelf:'flex-end',
-    marginTop:-20
-    
+    alignSelf: 'flex-end',
+    marginTop: -20
+
   },
-
   
-
   yearsContainer: {
-    width: windowWidth,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     
+    padding:20,
+    flexDirection: 'row', // Display buttons horizontally
+    justifyContent: 'center', // Center the buttons horizontally
+    alignItems: 'center', // Center the buttons vertically
+   
+
 
   },
   yearButton: {
@@ -362,9 +356,7 @@ const styles = StyleSheet.create({
     width: 60,
     backgroundColor: '#9b9eae',
     borderRadius: 15,
-    marginRight:17,
-    marginLeft:17,
-    marginTop:10
+    
 
   },
   selectedButton: {
@@ -373,9 +365,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 60,
     backgroundColor: '#9d72e9',
-    marginRight:17,
-    marginLeft:17,
-    marginTop:10
+    
   },
 
   calculateButton: {
@@ -385,8 +375,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-   marginTop:40
-    
+    marginTop: 40
+
   },
 
   buttonText: {

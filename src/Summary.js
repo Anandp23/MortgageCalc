@@ -56,7 +56,8 @@ const Summary = () => {
     return (
       <React.Fragment key={item.name}>
         <Path d={path} fill={colors[index % colors.length]} />
-        <SvgText x={labelX} y={labelY + 15} textAnchor="middle" fontSize="10" fill={colors[index % colors.length]}>
+        <SvgText 
+        x={labelX} y={labelY + 15} textAnchor="middle" fontSize="10" fill={colors[index % colors.length]}>
           {item.paymentValues}
         </SvgText>
       </React.Fragment>
